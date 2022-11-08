@@ -1,0 +1,7 @@
+title Create a new note SPA
+
+note over Browser: On (form) submit, browser starts executing js-code\npreventDefault() avoids new GET request
+note over Browser: Browser executes event handler that\ncreates a new note, adds it to notes list,\nrerenders note list and sends the new note to the server
+Browser->Server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note right of Server: Server receives the contents as JSON-data\nContent-type header tells how to parse the data:\n{content: "tadarara", date: "2022-11-08T12:27:19.807Z"}
+Server-->Browser: Status Code 201 (created)

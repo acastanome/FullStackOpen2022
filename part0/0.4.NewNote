@@ -1,0 +1,15 @@
+title Create a new note
+
+Browser->Server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+note right of Server: Server creates new note object and\nadds it to notes array
+Server-->Browser: Status Code 302. URL redirect to Location: /exampleapp/notes
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+Server-->Browser: HTML-code
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+Server-->Browser: main.css
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+Server-->Browser: main.js
+note over Browser: Browser starts executing js-code\nthat requests JSON data from Server
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+Server-->Browser: [{content: "Hello World!", date: "2022-11-08T03:12:35.652Z"}, ...]
+note over Browser: Browser executes event handler\nthat renders notes to display
