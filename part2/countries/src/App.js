@@ -5,7 +5,6 @@ const Filters = ({ newFilter, setNewFilter }) => {
 	const handleFilterChange = (event) => {
 		setNewFilter(event.target.value);
 	};
-	console.log("render filters");
 	return (
 		<div>
 			find countries
@@ -15,7 +14,6 @@ const Filters = ({ newFilter, setNewFilter }) => {
 };
 
 const Countries = ({ countries, filters, setNewFilter }) => {
-	console.log("render countries");
 	if (filters) {
 		const countriesFiltered = countries.filter((country) =>
 			country.name.toLowerCase().includes(filters.toLowerCase())
@@ -40,7 +38,6 @@ const Countries = ({ countries, filters, setNewFilter }) => {
 };
 
 const CountryName = ({ country, setNewFilter }) => {
-	console.log("render country name");
 	return (
 		<li>
 			{country.name}{" "}
@@ -56,8 +53,6 @@ const CountryName = ({ country, setNewFilter }) => {
 };
 
 const Country = ({ country }) => {
-	console.log("render country");
-
 	return (
 		<div>
 			<h3>{country.name}</h3>
@@ -71,25 +66,38 @@ const Country = ({ country }) => {
 };
 
 const Weather = ({ country }) => {
-	// const [weather, setWeather] = useState([]);
+	const api_key = process.env.REACT_APP_API_KEY;
+	const params = new URLSearchParams([
+		["lat", country.latlng[0]],
+		["lon", country.latlng[1]],
+		["appid", api_key],
+	]);
+	const [weather, setWeather] = useState([]);
 
-	// useEffect(() => {
-	// 	axios.get("https://openweathermap.org").then((response) => {
-	// 		setWeather(response.data);
-	// 	});
-	// }, []);
-	return (
-		<div>
-			<h4>Weather in {country.capital}</h4>
-			<p>temperature Celsius</p>
-			<img style={{ width: "100px" }} src={country.flag} alt="weather"></img>
-			<p>wind m/s</p>
-		</div>
-	);
+	useEffect(() => {
+		axios
+			.get("https://api.openweathermap.org/data/2.5/weather?", { params })
+			.then((response) => {
+				setWeather(response.data);
+			});
+	}, []);
+	if (weather.length !== 0) {
+		return (
+			<div>
+				<h4>Weather in {country.capital}</h4>
+				<p>temperature {(weather.main.temp - 273.15).toFixed(2)} Celsius</p>
+				<img
+					style={{ width: "100px" }}
+					src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+					alt="weather"
+				></img>
+				<p>wind {weather.wind.speed} m/s</p>
+			</div>
+		);
+	}
 };
 
 const Languages = ({ country }) => {
-	console.log("render languages");
 	return (
 		<>
 			<h4>languages</h4>
@@ -103,7 +111,6 @@ const Languages = ({ country }) => {
 };
 
 const Language = ({ language }) => {
-	console.log("render language");
 	return <li>{language}</li>;
 };
 
@@ -116,8 +123,6 @@ const App = () => {
 			setCountries(response.data);
 		});
 	}, []);
-
-	console.log("render app");
 
 	return (
 		<div>
