@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useField } from './hooks'
 
 import {
   Routes,
@@ -70,52 +71,61 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  // const [content, setContent] = useState('')
+  // const [author, setAuthor] = useState('')
+  // const [info, setInfo] = useState('')
+  const content = useField('content')
+  const author = useField('author')
+  const info = useField('info')
 
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0,
     })
     navigate('/')
+  }
+
+  const handleReset = (e) => {
+    e.preventDefault()
+    content.onChange(e)
+    author.onChange(e)
+    info.onChange(e)
   }
 
   return (
     <div>
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          content
-          <input
-            name="content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
-        </div>
-        <div>
-          author
-          <input
+        {/* <div> */}
+        content
+        <input {...content} />
+        {/* </div> */}
+        {/* <div> */}
+        <br />
+        author
+        {/* <input
             name="author"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
-          />
-        </div>
-        <div>
-          url for more info
-          <input
-            name="info"
-            value={info}
-            onChange={(e) => setInfo(e.target.value)}
-          />
-        </div>
-        <button>create</button>
+          /> */}
+        <input {...author} />
+        {/* </div> */}
+        {/* <div> */}
+        <br />
+        url for more info
+        <input {...info} />
+        {/* </div> */}
+        <br />
+        <button type="submit">create</button>
+        <button type="reset" onClick={(e) => handleReset(e)}>
+          reset
+        </button>
       </form>
     </div>
   )
